@@ -1,0 +1,114 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class CubeTimer extends JLabel implements MouseListener, ActionListener {
+	private JButton startButton, stopButton, clearButton, newScramble;
+	private JLabel scramble, display;
+	private long startTime;
+	private Timer timer;
+	private boolean running;
+	
+	public CubeTimer() {
+		
+		super("  Click to start timer.  ", JLabel.CENTER);
+        addMouseListener(this);
+
+		JFrame f = new JFrame("Cubing Timer");
+		startButton = new JButton("Start");
+		stopButton = new JButton("Stop");
+		clearButton = new JButton("Clear");
+		newScramble = new JButton("New Scramble");
+		scramble = new JLabel();
+		display = new JLabel();
+	    
+		String eggs = Scrambler.generateScramble();
+		
+		scramble.setFont(new Font("SansSerif", Font.BOLD, 20));
+		scramble.setText(eggs);
+		scramble.setBounds(30,80,560,30);
+		f.add(scramble);
+		
+		display.setFont(new Font("SansSerif", Font.PLAIN, 96));
+	    display.setText("0.000"); 
+	    display.setBounds(170,110,240,100);
+	    f.add(display);
+
+		startButton.setBounds(130,230,95,30);  
+		f.add(startButton);  
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				long time = (System.currentTimeMillis() - startTime);
+				if (time > 1000) { 
+					display.setText(time / 1000 + "." + time % 1000);
+		        }
+				else {
+					display.setText("0." + time);
+				}
+				if (running == false) {
+					running = true;
+					startTime = evt.getWhen(); 
+					display.setText("0.000");
+					if (timer == null) {
+						timer = new Timer(100,this);
+						timer.start();
+					}
+					else
+						timer.restart();
+				}
+	       }
+		});
+		
+		stopButton.setBounds(240,230,95,30);  
+		f.add(stopButton);  
+		stopButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				timer.stop();
+				running = false;
+				long endTime = evt.getWhen();
+				double seconds = (endTime - startTime) / 1000.0;
+				display.setText(seconds + "");
+			  }
+			});
+		
+		clearButton.setBounds(350,230,95,30);  
+		f.add(clearButton);  
+		clearButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				display.setText("CLEARED");
+				timer.stop();
+				
+				display.setText("0.000");
+			  }
+			});
+		
+		newScramble.setBounds(195,30,180,40);  
+		newScramble.setFont(new Font("SansSerif", Font.PLAIN, 20));
+		f.add(newScramble);  
+		newScramble.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scramble.setText(Scrambler.generateScramble());
+			  }
+			});
+		
+		f.setSize(600,600);  
+        f.setLayout(null);  
+        f.setVisible(true); 	
+	}
+	
+	public void actionPerformed(ActionEvent e) { }
+	
+	public void mouseClicked(MouseEvent arg0) { }
+	
+	public void mouseEntered(MouseEvent arg0) { }
+	
+	public void mouseExited(MouseEvent arg0) { }
+	
+	public void mousePressed(MouseEvent arg0) { }
+	
+	public void mouseReleased(MouseEvent arg0) { }
+	
+    public static void main(String[] args) {
+    	CubeTimer stooop = new CubeTimer();
+    }
+}
