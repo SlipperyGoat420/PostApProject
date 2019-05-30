@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class CubeTimer extends JLabel implements MouseListener, ActionListener {
+	private static final long serialVersionUID = 1L;
 	private JButton startButton, stopButton, clearButton, newScramble;
 	private JLabel scramble, display;
 	private long startTime;
@@ -31,7 +32,7 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 		
 		display.setFont(new Font("SansSerif", Font.PLAIN, 96));
 	    display.setText("0.000"); 
-	    display.setBounds(170,110,240,100);
+	    display.setBounds(145,110,380,100);
 	    f.add(display);
 
 		startButton.setBounds(130,230,95,30);  
@@ -39,7 +40,15 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				long time = (System.currentTimeMillis() - startTime);
-				if (time > 1000) { 
+				if (time > 60000) {
+					if ((time % 60000) < 10000) {
+						display.setText(time / 60000 + ":0" + (time / 1000) % 10 + "." + time % 1000);
+					}
+					else {
+						display.setText(time / 60000 + ":" + ((time - 60000) / 1000) + "." + time % 1000);
+					}
+				}
+				else if (time > 1000) { 
 					display.setText(time / 1000 + "." + time % 1000);
 		        }
 				else {
@@ -67,7 +76,21 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 				running = false;
 				long endTime = evt.getWhen();
 				double seconds = (endTime - startTime) / 1000.0;
-				display.setText(seconds + "");
+				if (seconds > 60000) {
+					if ((seconds % 60000) < 10000) {
+						display.setText(seconds / 60000 + ":0" + (seconds / 1000) % 10 + "." + seconds % 1000);
+					}
+					else {
+						display.setText(seconds / 60000 + ":" + ((seconds - 60000) / 1000) + "." + seconds % 1000);
+					}
+				}
+				else if (seconds > 1000) { 
+					display.setText(seconds / 1000 + "." + seconds % 1000);
+		        }
+				else {
+					display.setText("" + seconds);
+				}
+				//display.setText(seconds + "");
 			  }
 			});
 		
