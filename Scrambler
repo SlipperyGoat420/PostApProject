@@ -1,0 +1,38 @@
+public class Scrambler {
+	private static final String[] faces = {"Rx", "Lx", "Uy", "Dy", "Fz", "Bz"};
+	
+	private static final String[] direction = {"","'","2"};
+	
+	public static void main(String[] args) {
+			System.out.println(generateScramble());
+	}
+	
+	public static String generateScramble() {
+		String scramble = "";
+		String penultimateFace = "  ";
+		String lastFace = "  ";
+		for (int i = 0; i < 20; i++) {
+			String newFace = randomFace(penultimateFace, lastFace);
+			scramble += newFace.charAt(0) + randomDirection() + " ";
+			penultimateFace = lastFace;
+			lastFace = newFace;
+		}
+		return scramble;
+	}
+	
+	public static String randomFace(String penultimate, String last) {
+		String result = faces[(int)(Math.random() * faces.length)];
+		if (last.equals(result) || sameAxis(penultimate, last, result)) {
+				return randomFace(penultimate, last);
+		}
+		return result; 
+	}
+	
+	public static String randomDirection() {
+		return direction[(int)(Math.random() * direction.length)];
+	}
+	
+	public static boolean sameAxis(String a, String b, String c) {
+		return a.charAt(1) == b.charAt(1) && b.charAt(1) == c.charAt(1); 
+	}
+}
