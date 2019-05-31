@@ -160,6 +160,8 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 	public void mouseReleased(MouseEvent arg0) { }
 	
     public static void main(String[] args) {
-    	CubeTimer stooop = new CubeTimer();
+    	@SuppressWarnings("unused")
+		CubeTimer stooop = new CubeTimer();
+    	
     }
 }
