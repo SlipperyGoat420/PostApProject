@@ -5,10 +5,11 @@ import java.awt.event.*;
 public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton startButton, stopButton, clearButton, newScramble;
-	private JLabel scramble, display;
+	private JLabel scramble, display, data;
 	private long startTime;
 	private Timer timer;
 	private boolean running;
+	private int dataPos;
 	
 	public CubeTimer() {
 		
@@ -22,8 +23,16 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 		newScramble = new JButton("New Scramble");
 		scramble = new JLabel();
 		display = new JLabel();
+		data = new JLabel();
+		JLabel dataLabel = new JLabel();
+		JLabel image = new JLabel();
+		dataPos = 300;
 	    
 		String eggs = Scrambler.generateScramble();
+		
+		image.setIcon(new ImageIcon("C:/Users/dnark/Downloads/rubiks-cube-coloured.png"));
+		image.setBounds(350,250,300,300);
+		f.add(image);
 		
 		scramble.setFont(new Font("SansSerif", Font.BOLD, 20));
 		scramble.setText(eggs);
@@ -34,8 +43,18 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 	    display.setText("0.000"); 
 	    display.setBounds(145,110,380,100);
 	    f.add(display);
+	    
+	    dataLabel.setBounds(20,270,200,40);
+		dataLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+		dataLabel.setText("Previous Time");
+	    f.add(dataLabel);
+	    
+		data.setBounds(20,dataPos,200,40);
+		data.setFont(new Font("SansSerif", Font.PLAIN, 18));
+	    f.add(data);
 
 		startButton.setBounds(130,230,95,30);  
+		startButton.setBackground(Color.GREEN);
 		f.add(startButton);  
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -68,11 +87,12 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 	       }
 		});
 		
-		stopButton.setBounds(240,230,95,30);  
+		stopButton.setBounds(240,230,95,30);
+		stopButton.setBackground(Color.RED);
 		f.add(stopButton);  
 		stopButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				timer.stop();
+				//timer.stop();
 				running = false;
 				long endTime = evt.getWhen();
 				double seconds = (endTime - startTime) / 1000.0;
@@ -90,22 +110,27 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 				else {
 					display.setText("" + seconds);
 				}
-				//display.setText(seconds + "");
+				timer.stop();
+				data.setText(seconds + "");
+				scramble.setText(Scrambler.generateScramble());
+				updatePos();
 			  }
 			});
 		
-		clearButton.setBounds(350,230,95,30);  
+		clearButton.setBounds(350,230,95,30); 
+		clearButton.setBackground(Color.YELLOW);
 		f.add(clearButton);  
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				display.setText("CLEARED");
 				timer.stop();
-				
+				scramble.setText(Scrambler.generateScramble());
 				display.setText("0.000");
 			  }
 			});
 		
 		newScramble.setBounds(195,30,180,40);  
+		newScramble.setBackground(Color.CYAN);
 		newScramble.setFont(new Font("SansSerif", Font.PLAIN, 20));
 		f.add(newScramble);  
 		newScramble.addActionListener(new ActionListener() {
@@ -117,6 +142,9 @@ public class CubeTimer extends JLabel implements MouseListener, ActionListener {
 		f.setSize(600,600);  
         f.setLayout(null);  
         f.setVisible(true); 	
+	}
+	public void updatePos() {
+		dataPos += 30;
 	}
 	
 	public void actionPerformed(ActionEvent e) { }
